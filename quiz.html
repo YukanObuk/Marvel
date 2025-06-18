@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Marvel</title>
+    <style>
+        body {
+            background: black url('./assets/sublogo.jpg') center/cover fixed;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            line-height: 1.6;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            background: rgba(0, 0, 0, 0.7);
+            margin-bottom: 20px;
+            border-bottom: 3px solid #ec1d24;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header img {
+            max-width: 200px;
+            height: auto;
+        }
+
+        h1 {
+            display: none;
+        }
+
+        .question-card {
+            background: rgba(0, 0, 0, 0.8);
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #ec1d24;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            color: #ec1d24;
+            margin: 0 0 15px 0;
+            font-size: 1.2em;
+        }
+
+        .options-container {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .option-letter {
+            width: 25px;
+            height: 25px;
+            border: 2px solid #ec1d24;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"]:checked+.option {
+            background: #ec1d24;
+            transform: translateX(5px);
+        }
+
+        input[type="radio"]:checked+.option .option-letter {
+            background: white;
+            color: #ec1d24;
+        }
+
+        .option.correct {
+            background-color: #2ecc71 !important;
+            color: white;
+        }
+
+        .option.incorrect {
+            background-color: #e74c3c !important;
+            color: white;
+        }
+
+        /* Estilos para os botões de ação */
+        .action-button {
+            background: #ec1d24;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto 10px auto;
+            /* Ajustei a margem para separar os botões */
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .action-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(236, 29, 36, 0.5);
+        }
+
+        #result {
+            text-align: center;
+            font-size: 1.2em;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            display: none;
+            margin-top: 20px;
+            /* Adicionado para separar o resultado do quiz */
+        }
+
+        #restart-btn {
+            display: none;
+            /* Inicia oculto */
+            margin-top: 20px;
+            /* Espaçamento do resultado */
+        }
+
+        /* Media query para telas menores (responsividade) */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            header {
+                padding: 15px 0;
+            }
+
+            header img {
+                max-width: 150px;
+            }
+
+            .question-card {
+                padding: 15px;
+            }
+
+            h2 {
+                font-size: 1.1em;
+            }
+
+            .option {
+                padding: 10px;
+            }
+
+            .option-letter {
+                width: 20px;
+                height: 20px;
+                font-size: 0.8em;
+                margin-right: 8px;
+            }
+
+            .action-button {
+                padding: 12px 25px;
+                font-size: 1em;
+                margin: 20px auto 10px auto;
+            }
+
+            #result {
+                font-size: 1em;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="./assets/marvellogo.png" alt="Logo Marvel">
+        <h1>Quiz Marvel</h1>
+    </header>
+
+    <div class="container">
+        <form id="quizForm">
+            <div class="question-card">
+                <h2>1. Quem foi o primeiro Vingador?</h2>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="pergunta1" value="Homem-Aranha">
+                        <div class="option">
+                            <span class="option-letter">A</span>
+                            Homem-Aranha
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta1" value="Capitão América">
+                        <div class="option">
+                            <span class="option-letter">B</span>
+                            Capitão América
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta1" value="Homem de Ferro">
+                        <div class="option">
+                            <span class="option-letter">C</span>
+                            Homem de Ferro
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta1" value="Soldado Invernal">
+                        <div class="option">
+                            <span class="option-letter">D</span>
+                            Soldado Invernal
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h2>2. Primeiro herói da Marvel com filme solo no MCU?</h2>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="pergunta2" value="Homem de Ferro">
+                        <div class="option">
+                            <span class="option-letter">A</span>
+                            Homem de Ferro
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta2" value="Capitão América">
+                        <div class="option">
+                            <span class="option-letter">B</span>
+                            Capitão América
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta2" value="Hulk">
+                        <div class="option">
+                            <span class="option-letter">C</span>
+                            Hulk
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta2" value="Thor">
+                        <div class="option">
+                            <span class="option-letter">D</span>
+                            Thor
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h2>3. Em qual filme Peter Parker aparece pela primeira vez no MCU?</h2>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="pergunta3" value="Homem de Ferro 2">
+                        <div class="option">
+                            <span class="option-letter">A</span>
+                            Homem de Ferro 2
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta3" value="Vingadores">
+                        <div class="option">
+                            <span class="option-letter">B</span>
+                            Vingadores
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta3" value="Capitão América: Guerra Civil">
+                        <div class="option">
+                            <span class="option-letter">C</span>
+                            Capitão América: Guerra Civil
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta3" value="Homem-Aranha: Longe de Casa">
+                        <div class="option">
+                            <span class="option-letter">D</span>
+                            Homem-Aranha: Longe de Casa
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h2>4. Pai do Star-Lord em Guardiões da Galáxia Vol. 2?</h2>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="pergunta4" value="Ego, o Planeta Vivo">
+                        <div class="option">
+                            <span class="option-letter">A</span>
+                            Ego, o Planeta Vivo
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta4" value="Drax">
+                        <div class="option">
+                            <span class="option-letter">B</span>
+                            Drax
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta4" value="Yondu">
+                        <div class="option">
+                            <span class="option-letter">C</span>
+                            Yondu
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta4" value="Kraglin">
+                        <div class="option">
+                            <span class="option-letter">D</span>
+                            Kraglin
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h2>5. Quem disse "Eu sou inevitável"?</h2>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="pergunta5" value="Gamora">
+                        <div class="option">
+                            <span class="option-letter">A</span>
+                            Gamora
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta5" value="Ultron">
+                        <div class="option">
+                            <span class="option-letter">B</span>
+                            Ultron
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta5" value="Thanos">
+                        <div class="option">
+                            <span class="option-letter">C</span>
+                            Thanos
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta5" value="Loki">
+                        <div class="option">
+                            <span class="option-letter">D</span>
+                            Loki
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h2>6. Criador do Visão nos quadrinhos?</h2>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="pergunta6" value="Jarvis">
+                        <div class="option">
+                            <span class="option-letter">A</span>
+                            Jarvis
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta6" value="Bruce Banner">
+                        <div class="option">
+                            <span class="option-letter">B</span>
+                            Bruce Banner
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta6" value="Tony Stark">
+                        <div class="option">
+                            <span class="option-letter">C</span>
+                            Tony Stark
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta6" value="Ultron">
+                        <div class="option">
+                            <span class="option-letter">D</span>
+                            Ultron
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h2>7. Quem levantou o Mjolnir além de Thor e Capitão América?</h2>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="pergunta7" value="Thor">
+                        <div class="option">
+                            <span class="option-letter">A</span>
+                            Thor
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta7" value="Visão">
+                        <div class="option">
+                            <span class="option-letter">B</span>
+                            Visão
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta7" value="Feiticeira Escarlate">
+                        <div class="option">
+                            <span class="option-letter">C</span>
+                            Feiticeira Escarlate
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta7" value="Viúva Negra">
+                        <div class="option">
+                            <span class="option-letter">D</span>
+                            Viúva Negra
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h2>8. Evento que dividiu os heróis em duas facções?</h2>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="pergunta8" value="Guerra Civil">
+                        <div class="option">
+                            <span class="option-letter">A</span>
+                            Guerra Civil
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta8" value="Vingadores: Era de Ultron">
+                        <div class="option">
+                            <span class="option-letter">B</span>
+                            Vingadores: Era de Ultron
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta8" value="Vingadores">
+                        <div class="option">
+                            <span class="option-letter">C</span>
+                            Vingadores
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta8" value="Vingadores: Juízo Final">
+                        <div class="option">
+                            <span class="option-letter">D</span>
+                            Vingadores: Juízo Final
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h2>9. IA que substitui J.A.R.V.I.S. em Vingadores: Era de Ultron?</h2>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="pergunta9" value="C-3PO">
+                        <div class="option">
+                            <span class="option-letter">A</span>
+                            C-3PO
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta9" value="F.R.I.D.A.Y.">
+                        <div class="option">
+                            <span class="option-letter">B</span>
+                            F.R.I.D.A.Y.
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta9" value="Hammond">
+                        <div class="option">
+                            <span class="option-letter">C</span>
+                            Hammond
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta9" value="Happy">
+                        <div class="option">
+                            <span class="option-letter">D</span>
+                            Happy
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h2>10. Vilão mais violento com o Homem-Aranha?</h2>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="pergunta10" value="Venom">
+                        <div class="option">
+                            <span class="option-letter">A</span>
+                            Venom
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta10" value="Homem-Areia">
+                        <div class="option">
+                            <span class="option-letter">B</span>
+                            Homem-Areia
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta10" value="Carnificina">
+                        <div class="option">
+                            <span class="option-letter">C</span>
+                            Carnificina
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="pergunta10" value="Duende Verde">
+                        <div class="option">
+                            <span class="option-letter">D</span>
+                            Duende Verde
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <button id="submit-btn" type="button" onclick="calculateScore()" class="action-button">Verificar
+                Resultado</button>
+
+            <div id="result"></div>
+            <button id="restart-btn" type="button" onclick="restartQuiz()" class="action-button">Tentar
+                Novamente</button>
+        </form>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            pergunta1: "Capitão América",
+            pergunta2: "Homem de Ferro",
+            pergunta3: "Capitão América: Guerra Civil",
+            pergunta4: "Ego, o Planeta Vivo",
+            pergunta5: "Thanos",
+            pergunta6: "Ultron",
+            pergunta7: "Visão",
+            pergunta8: "Guerra Civil",
+            pergunta9: "F.R.I.D.A.Y.",
+            pergunta10: "Duende Verde"
+        };
+
+        function getResultMessage(score) {
+            if (score === 10) {
+                return "Uau! Você é um verdadeiro fã da Marvel! Incrível!";
+            } else if (score >= 7) {
+                return "Parabéns! Excelente pontuação. Você conhece bem o universo Marvel.";
+            } else if (score >= 4) {
+                return "Bom trabalho! Você tem um conhecimento razoável, mas pode melhorar.";
+            } else {
+                return "Hmm... Parece que o universo Marvel ainda guarda muitos segredos para você. Continue assistindo!";
+            }
+        }
+
+        function calculateScore() {
+            let score = 0;
+            const allQuestions = document.querySelectorAll('.question-card');
+            let allAnswered = true; // Flag para verificar se todas as perguntas foram respondidas
+
+            allQuestions.forEach(question => {
+                // Remove classes de feedback anteriores (se houver) e reseta o background
+                question.querySelectorAll('.option').forEach(option => {
+                    option.classList.remove('correct', 'incorrect');
+                    option.style.background = 'rgba(255, 255, 255, 0.1)';
+                });
+
+                const selected = question.querySelector('input:checked');
+                const questionName = selected ? selected.name : null;
+                const correctAnswerValue = correctAnswers[questionName];
+
+                if (selected) {
+                    if (selected.value === correctAnswerValue) {
+                        score++;
+                        selected.parentElement.querySelector('.option').classList.add('correct');
+                    } else {
+                        selected.parentElement.querySelector('.option').classList.add('incorrect');
+                        // Mostra a resposta correta em verde, mesmo que a do usuário esteja errada
+                        const correctOptionElement = question.querySelector(`input[value="${correctAnswerValue}"]`);
+                        if (correctOptionElement) {
+                            correctOptionElement.parentElement.querySelector('.option').classList.add('correct');
+                        }
+                    }
+                } else {
+                    // Se uma pergunta não foi respondida, marca a flag como falsa
+                    allAnswered = false;
+                    // Opcional: Adicionar um feedback visual para perguntas não respondidas (ex: borda vermelha na card)
+                    question.style.border = "5px solid #ffcc00"; // Borda amarela de aviso
+                }
+            });
+
+            if (allAnswered) {
+                showResult(score);
+            } else {
+                alert("Por favor, responda todas as perguntas antes de verificar o resultado!");
+                // Remove as bordas de aviso após o alerta
+                allQuestions.forEach(question => {
+                    question.style.border = "5px solid #ec1d24"; // Volta à cor original
+                });
+            }
+        }
+
+        function showResult(score) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <h3>Pontuação Final: ${score}/10</h3>
+                <p>${getResultMessage(score)}</p>
+            `;
+            resultDiv.style.display = 'block';
+            document.getElementById('submit-btn').style.display = 'none'; // Esconde o botão "Verificar Resultado"
+            document.getElementById('restart-btn').style.display = 'block'; // Mostra o botão "Tentar Novamente"
+
+            // Opcional: Rola a tela para o resultado
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function restartQuiz() {
+            // Esconde o resultado e o botão de reiniciar
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('restart-btn').style.display = 'none';
+            document.getElementById('submit-btn').style.display = 'block'; // Mostra o botão "Verificar Resultado" novamente
+
+            // Reseta o formulário (desmarca todas as opções)
+            document.getElementById('quizForm').reset();
+
+            // Remove os feedbacks visuais de todas as opções
+            const allOptions = document.querySelectorAll('.option');
+            allOptions.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+                option.style.background = 'rgba(255, 255, 255, 0.1)'; // Retorna ao background original
+            });
+
+            // Remove qualquer borda de aviso de perguntas não respondidas
+            document.querySelectorAll('.question-card').forEach(question => {
+                question.style.border = "5px solid #ec1d24"; // Volta à cor original
+            });
+
+            // Opcional: Rola a tela para o topo do quiz
+            document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+
+</html>
